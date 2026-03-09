@@ -18,10 +18,13 @@ router = APIRouter(prefix="/stremio", tags=["Stremio Addon"])
 
 # Define available genres
 GENRES = [
-    "Action", "Adventure", "Animation", "Biography", "Comedy",
-    "Crime", "Documentary", "Drama", "Family", "Fantasy",
-    "History", "Horror", "Music", "Mystery", "Romance",
-    "Sci-Fi", "Sport", "Thriller", "War", "Western"
+    "Aile", "Aksiyon", "Aksiyon ve Macera", "Animasyon", "Belgesel",
+    "Bilim Kurgu", "Bilim Kurgu ve Fantazi", "Biyografi", "Çocuklar",
+    "Dram", "Fantastik", "Gerilim", "Gerçeklik", "Gizem", "Haberler",
+    "Kara Film", "Komedi", "Korku", "Kısa", "Macera", "Müzik",
+    "Müzikal", "Oyun Gösterisi", "Pembe Dizi", "Romantik", "Savaş",
+    "Savaş ve Politika", "Spor", "Suç", "TV Filmi", "Talk-Show",
+    "Tarih", "Vahşi Batı"
 ]
 
 
@@ -70,7 +73,7 @@ def format_stream_details(filename: str, quality: str, size: str) -> tuple[str, 
     if parsed.get("codec"):
         codec_parts.append(f"🎥 {parsed.get('codec')}")
     if parsed.get("bitDepth"):
-        codec_parts.append(f"🌈 {parsed.get('bitDepth')}bit")
+        codec_parts.append(f"🔟 {parsed.get('bitDepth')}bit")
     if parsed.get("audio"):
         codec_parts.append(f"🔊 {parsed.get('audio')}")
     if parsed.get("encoder"):
@@ -118,7 +121,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
             {
                 "type": "movie",
                 "id": "latest_movies",
-                "name": "Latest",
+                "name": "Yeni eklenen",
                 "extra": [
                     {"name": "genre", "isRequired": False, "options": GENRES},
                     {"name": "skip"}
@@ -128,7 +131,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
             {
                 "type": "movie",
                 "id": "top_movies",
-                "name": "Popular",
+                "name": "Popüler",
                 "extra": [
                     {"name": "genre", "isRequired": False, "options": GENRES},
                     {"name": "skip"},
@@ -139,7 +142,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
             {
                 "type": "series",
                 "id": "latest_series",
-                "name": "Latest",
+                "name": "Yeni eklenen",
                 "extra": [
                     {"name": "genre", "isRequired": False, "options": GENRES},
                     {"name": "skip"}
@@ -149,7 +152,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
             {
                 "type": "series",
                 "id": "top_series",
-                "name": "Popular",
+                "name": "Popüler",
                 "extra": [
                     {"name": "genre", "isRequired": False, "options": GENRES},
                     {"name": "skip"},
@@ -161,7 +164,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
 
     # Build dynamic name/description/version with subscription info
     addon_name = ADDON_NAME
-    addon_desc = "Streams movies and series from your Telegram."
+    addon_desc = "Dizi ve film arşivi."
     addon_version = ADDON_VERSION
     expiry_obj = None
 
@@ -197,7 +200,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
         "id": f"telegram.media.{token[:8]}",   # per-user ID so each token is independent
         "version": addon_version,
         "name": addon_name,
-        "logo": "https://i.postimg.cc/XqWnmDXr/Picsart-25-10-09-08-09-45-867.png",
+        "logo": "https://i.hizliresim.com/9n9fgux.jpg",
         "description": addon_desc,
         "types": ["movie", "series"],
         "resources": resources,
