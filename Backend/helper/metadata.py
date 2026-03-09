@@ -452,7 +452,7 @@ async def fetch_tv_metadata(title, season, episode, encoded_string, year=None, q
         "logo": images["logo"],
         "cast": imdb.get("cast", []),
         "runtime": str(imdb.get("runtime") or ""),          
-        ""genres": tur_genre_normalize(imdb.get("genre", [])),
+        "genres": tur_genre_normalize(imdb.get("genre", [])),
         "media_type": "tv",
 
         "season_number": season,
