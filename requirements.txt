@@ -12,4 +12,4 @@ uvicorn
 uv
 deep-translator==1.11.4
 psutil
-python-dateutil==2.9.0
+python-dateutil
