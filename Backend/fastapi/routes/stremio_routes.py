@@ -10,7 +10,7 @@ from Backend.fastapi.security.tokens import verify_token
 
 # --- Configuration ---
 BASE_URL = Telegram.BASE_URL
-ADDON_NAME = "Telegram"
+ADDON_NAME = "Kartal788"
 ADDON_VERSION = __version__
 PAGE_SIZE = 15
 
