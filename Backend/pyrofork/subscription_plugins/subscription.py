@@ -160,7 +160,7 @@ async def handle_payment_screenshot(client: Client, message: Message):
             f"<b>🆔 Kullanıcı ID:</b> <code>{sender_id}</code>\n"
             f"<b>🔗 Kullanıcı Adı:</b> {username_str}\n\n"
             f"<b>📦 Plan Detayları:</b>\n"
-            f"  • Süre: <b>{duration} days</b>\n"
+            f"  • Süre: <b>{duration} gün</b>\n"
             f"  • Fiyat: <b>{price} TL</b>\n\n"
             f"Lütfen yukarıdaki ekran görüntüsünü inceleyin ve onaylayın veya reddedin.."
         )
