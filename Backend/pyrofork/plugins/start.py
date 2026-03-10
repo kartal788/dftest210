@@ -90,7 +90,7 @@ async def send_start_message(client: Client, message: Message):
             'Aboneliğiniz aktif durumdadır. Kişisel eklenti bağlantınız aşağıdadır:\n\n'
             '🎬 <b>Stremio eklentisi:</b>\n'
             f'<code>{addon_url}</code>\n\n'
-            'Aboneliğiniz aktif durumdadır. Kişisel eklenti bağlantınız aşağıdadır',
+            'Linki kopyalayıp stremio eklentiler bölümüne ekleyin',
             quote=True,
             parse_mode=enums.ParseMode.HTML
         )
