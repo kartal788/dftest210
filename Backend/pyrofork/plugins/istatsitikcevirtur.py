@@ -130,7 +130,6 @@ async def cevir(client: Client, message: Message):
     start_msg = await message.reply_text(
         "🇹🇷 Türkçe çeviri hazırlanıyor...\nİlerleme tek mesajda gösterilecektir.",
         parse_mode=enums.ParseMode.MARKDOWN,
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("❌ İptal Et", callback_data="stop")]]),
     )
 
     start_time = time.time()
@@ -167,9 +166,10 @@ async def cevir(client: Client, message: Message):
             idx = 0
 
             while idx < len(ids):
-                if stop_event.is_set():
-                    break
-
+                if not is_running: # Eğer kullanıcı /durdur dediyse döngüden çık
+                    await start_msg.edit_text("⛔ İşlem kullanıcı tarafından durduruldu.")
+                    return # İşlemi sonlandır
+                    
                 batch_ids = ids[idx: idx + batch_size]
                 batch_docs = list(col.find({"_id": {"$in": batch_ids}}))
 
@@ -227,7 +227,6 @@ async def cevir(client: Client, message: Message):
                                 f"┖ RAM → {ram}%"
                             ),
                             parse_mode=enums.ParseMode.MARKDOWN,
-                            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("❌ İptal Et", callback_data="stop")]]),
                         )
                     except:
                         pass
@@ -689,3 +688,15 @@ async def linklerisil(client: Client, message: Message):
             total_docs += 1
 
     await status.edit_text(f"✅ İşlem tamamlandı\n\n📄 Etkilenen kayıt: {total_docs}\n🗑️ Silinen tekrar: {total_removed}")
+
+@Client.on_message(filters.command("durdur") & filters.private & filters.user(OWNER_ID))
+async def durdur_komutu(client: Client, message: Message):
+    global is_running
+    if is_running:
+        is_running = False
+        await message.reply_text("⛔ İşlem durduruluyor... Lütfen bekleyin.")
+    else:
+        await message.reply_text("⚠️ Şu an çalışan bir işlem yok.")
+
+
+
