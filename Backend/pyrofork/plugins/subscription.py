@@ -43,7 +43,7 @@ async def plan_selection(client: Client, callback_query: CallbackQuery):
     expiry_str = new_expiry.strftime("%Y-%m-%d %H:%M UTC")
 
     text = (
-        f"<b>✅ Plan Selected: {plan['days']} Days</b>\n\n"
+        f"<b>✅ Seçilen Plan: {plan['days']} Gün</b>\n\n"
         f"<b>💰 Price:</b> ₹{plan['price']}\n"
         f"<b>📅 Expiry (if approved now):</b> {expiry_str}\n\n"
         f"<b>📋 Payment Instructions:</b>\n"
