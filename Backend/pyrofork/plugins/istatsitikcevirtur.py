@@ -279,61 +279,6 @@ async def cevir(client: Client, message: Message):
             pass
 
 
-# ---------------- /cevirekle ----------------
-@Client.on_message(filters.command("cevirekle") & filters.private & filters.user(OWNER_ID))
-async def cevirekle(client: Client, message: Message):
-    status = await message.reply_text("🔄 'cevrildi' alanları ekleniyor...")
-    total_updated = 0
-
-    for col in (movie_col, series_col):
-        # Üst seviye belgeler
-        docs_cursor = col.find({"cevrildi": {"$ne": True}}, {"_id": 1})
-        bulk_ops = [UpdateOne({"_id": doc["_id"]}, {"$set": {"cevrildi": True}}) for doc in docs_cursor]
-
-        # Dizi bölümleri için
-        if col == series_col:
-            docs_cursor = col.find({"seasons.episodes.cevrildi": {"$ne": True}}, {"_id": 1})
-            for doc in docs_cursor:
-                bulk_ops.append(
-                    UpdateOne(
-                        {"_id": doc["_id"]},
-                        {"$set": {"seasons.$[].episodes.$[].cevrildi": True}}
-                    )
-                )
-
-        if bulk_ops:
-            res = col.bulk_write(bulk_ops)
-            total_updated += res.modified_count
-
-    await status.edit_text(f"✅ 'cevrildi' alanları eklendi.\nToplam güncellenen kayıt: {total_updated}")
-
-@Client.on_message(filters.command("cevirkaldir") & filters.private & filters.user(OWNER_ID))
-async def cevirkaldir(client: Client, message: Message):
-    status = await message.reply_text("🔄 'cevrildi' alanları kaldırılıyor...")
-    total_updated = 0
-
-    for col in (movie_col, series_col):
-        # Üst seviye belgeler
-        docs_cursor = col.find({"cevrildi": True}, {"_id": 1})
-        bulk_ops = [UpdateOne({"_id": doc["_id"]}, {"$unset": {"cevrildi": ""}}) for doc in docs_cursor]
-
-        # Dizi bölümleri için
-        if col == series_col:
-            docs_cursor = col.find({"seasons.episodes.cevrildi": True}, {"_id": 1})
-            for doc in docs_cursor:
-                bulk_ops.append(
-                    UpdateOne(
-                        {"_id": doc["_id"]},
-                        {"$unset": {"seasons.$[].episodes.$[].cevrildi": ""}}
-                    )
-                )
-
-        if bulk_ops:
-            res = col.bulk_write(bulk_ops)
-            total_updated += res.modified_count
-
-    await status.edit_text(f"✅ 'cevrildi' alanları kaldırıldı.\nToplam güncellenen kayıt: {total_updated}")
-
 # ---------------- /TUR ----------------
 @Client.on_message(filters.command("tur") & filters.private & filters.user(OWNER_ID))
 async def tur_komutu(client: Client, message: Message):
