@@ -178,7 +178,7 @@ async def get_manifest(token: str, token_data: dict = Depends(verify_token)):
                     expiry_obj = user.get("subscription_expiry")
                     if expiry_obj:
                         expiry_str = expiry_obj.strftime("%d %b %Y").lstrip("0")
-                        addon_name = f"{ADDON_NAME} — Bitiş Tarihi {expiry_str}"
+                        addon_name = f"{ADDON_NAME} — Abonelik bitiş tarihi: {expiry_str}"
                         addon_desc = (
                             f"📅 Aboneliğiniz {expiry_str} \n"
                             f"tarihinde bitecektir."
