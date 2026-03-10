@@ -63,11 +63,15 @@ def convert_to_stremio_meta(item: dict) -> dict:
     return meta
 
 
-def format_stream_details(filename: str, quality: str, size: str) -> tuple[str, str]:
+def format_stream_details(filename: str, quality: str, size: str, file_id: str) -> tuple[str, str]:
+    # Kaynak Telegram mı yoksa doğrudan bir link mi kontrol et
+    source_prefix = "Link" if file_id.startswith(("http://", "https://")) else "Telegram"
+
     try:
         parsed = PTN.parse(filename)
     except Exception:
-        return (f"Telegram {quality}", f"📁 {filename}\n💾 {size}")
+        # Hata durumunda da source_prefix kullanıyoruz
+        return (f"{source_prefix} {quality}", f"📁 {filename}\n💾 {size}")
 
     codec_parts = []
     if parsed.get("codec"):
@@ -81,9 +85,10 @@ def format_stream_details(filename: str, quality: str, size: str) -> tuple[str, 
 
     codec_info = " ".join(codec_parts) if codec_parts else ""
 
+# İsimlendirmeyi source_prefix ile güncelleyin
     resolution = parsed.get("resolution", quality)
     quality_type = parsed.get("quality", "")
-    stream_name = f"Telegram {resolution} {quality_type}".strip()
+    stream_name = f"{source_prefix} {resolution} {quality_type}".strip()
 
     stream_title_parts = [
         f"📁 {filename}",
@@ -554,21 +559,32 @@ async def get_streams(
         return {"streams": []}
 
     streams = []
-    for quality in media_details.get("telegram", []):
-        if quality.get("id"):
-            filename = quality.get("name", "")
-            quality_str = quality.get("quality", "HD")
-            size = quality.get("size", "")
+for quality in media_details.get("telegram", []):
+    file_id = quality.get("id")
+    if not file_id:
+        continue
 
-            stream_name, stream_title = format_stream_details(
-                filename, quality_str, size
-            )
+    filename = quality.get("name", "")
+    quality_str = quality.get("quality", "HD")
+    size = quality.get("size", "")
 
-            streams.append({
-                "name": stream_name,
-                "title": stream_title,
-                "url": f"{BASE_URL}/dl/{token}/{quality.get('id')}/video.mkv"
-            })
+    # 1. file_id'yi fonksiyona gönderin
+    stream_name, stream_title = format_stream_details(
+        filename, quality_str, size, file_id
+    )
+
+    # 2. Eğer bir linkse doğrudan kullan, değilse sizin DL rotanızı kullan
+    url = (
+        file_id
+        if file_id.startswith(("http://", "https://"))
+        else f"{BASE_URL}/dl/{token}/{file_id}/video.mkv"
+    )
+
+    streams.append({
+        "name": stream_name,
+        "title": stream_title,
+        "url": url
+    })
 
     streams.sort(
         key=lambda s: get_resolution_priority(s.get("name", "")),
