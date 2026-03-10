@@ -555,44 +555,43 @@ async def get_streams(
         episode_number=episode_num
     )
 
+
     if not media_details or "telegram" not in media_details:
         return {"streams": []}
 
     streams = []
-for quality in media_details.get("telegram", []):
-    file_id = quality.get("id")
-    if not file_id:
-        continue
+    # Döngüyü doğru girintiyle başlatın
+    for quality in media_details.get("telegram", []):
+        file_id = quality.get("id")
+        if not file_id:
+            continue
 
-    filename = quality.get("name", "")
-    quality_str = quality.get("quality", "HD")
-    size = quality.get("size", "")
+        filename = quality.get("name", "")
+        quality_str = quality.get("quality", "HD")
+        size = quality.get("size", "")
 
-    # 1. file_id'yi fonksiyona gönderin
-    stream_name, stream_title = format_stream_details(
-        filename, quality_str, size, file_id
-    )
+        stream_name, stream_title = format_stream_details(
+            filename, quality_str, size, file_id
+        )
 
-    # 2. Eğer bir linkse doğrudan kullan, değilse sizin DL rotanızı kullan
-    url = (
-        file_id
-        if file_id.startswith(("http://", "https://"))
-        else f"{BASE_URL}/dl/{token}/{file_id}/video.mkv"
-    )
+        url = (
+            file_id
+            if file_id.startswith(("http://", "https://"))
+            else f"{BASE_URL}/dl/{token}/{file_id}/video.mkv"
+        )
 
-    streams.append({
-        "name": stream_name,
-        "title": stream_title,
-        "url": url
-    })
+        streams.append({
+            "name": stream_name,
+            "title": stream_title,
+            "url": url
+        })
 
+# Bu işlemlerin tamamı fonksiyonun içinde olmalıdır (girintiyi dikkatle ayarlayın)
     streams.sort(
         key=lambda s: get_resolution_priority(s.get("name", "")),
         reverse=True
     )
 
-    # Deduplicate stream names — Stremio collapses streams with identical names,
-    # so when two files share the same caption we append (1), (2) ... to each duplicate.
     name_count: dict = {}
     for s in streams:
         name_count[s["name"]] = name_count.get(s["name"], 0) + 1
@@ -603,4 +602,5 @@ for quality in media_details.get("telegram", []):
             seen[s["name"]] = seen.get(s["name"], 0) + 1
             s["name"] = f"{s['name']} ({seen[s['name']]})"
 
+    # return ifadesi artık fonksiyonun içinde olduğu için hata çözülecektir
     return {"streams": streams}
