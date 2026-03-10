@@ -336,43 +336,43 @@ async def configure_addon(token: str):
 <body>
   <div class="card">
     <div class="logo">🎬</div>
-    <h1>Telegram Stremio Addon</h1>
-    <p class="sub-title">Click the button below to install or update your addon in Stremio.</p>
+    <h1>Telegram Stremio Eklentisi</h1>
+    <p class="sub-title">Eklentinizi Stremio'da yüklemek veya güncellemek için aşağıdaki butona tıklayın.</p>
 
     <div class="info-row">
-      <span class="info-label">User</span>
+      <span class="info-label">Kullanıcı</span>
       <span class="info-val">{user_name}</span>
     </div>
     <div class="info-row">
-      <span class="info-label">Status</span>
+      <span class="info-label">Durum</span>
       <span class="status-badge">{status_text}</span>
     </div>
     <div class="info-row">
-      <span class="info-label">Expires</span>
+      <span class="info-label">Bitiş Tarihi</span>
       <span class="info-val">{expiry_str}</span>
     </div>
 
     <a href="{web_install_url}" class="btn-update" target="_blank">
-      ⚡ Install / Update in Stremio
+      ⚡ Stremio'da Yükle / Güncelle
     </a>
 
     <div class="steps">
-      <b>Or install manually:</b>
+      <b>Veya manuel olarak yükleyin:</b>
       <ol>
-        <li>Open Stremio → <b>Add-ons</b> tab</li>
-        <li>Click the <b>🔍 Search / URL</b> icon</li>
-        <li>Paste the URL below and press Enter</li>
+        <li>Stremio'yu açın → Eklentiler (Add-ons)</b> tab</li>
+        <li>Add addon kısmına tıklayın</b> icon</li>
+        <li>Aşağıdaki URL'yi (bağlantıyı) yapıştırın ve Enter tuşuna basın.</li>
       </ol>
     </div>
 
     <div class="url-box" id="murl">{manifest_url}</div>
-    <button onclick="copyUrl()" class="btn-copy">📋 Copy URL</button>
+    <button onclick="copyUrl()" class="btn-copy">📋 Bağlantıyı Kopyala</button>
     <script>
       function copyUrl() {{
         navigator.clipboard.writeText('{manifest_url}').then(() => {{
           const b = document.querySelector('.btn-copy');
-          b.textContent = '✅ Copied!';
-          setTimeout(() => b.textContent = '📋 Copy URL', 2000);
+          b.textContent = '✅ Kopyalandı!';
+          setTimeout(() => b.textContent = '📋 Bağlantıyı Kopyala, 2000);
         }});
       }}
     </script>
@@ -511,11 +511,11 @@ async def get_streams(
     # Abonelik ve limit kontrolleri (Burada mevcut kodunuz kalabilir)
     if token_data.get("subscription_expired"):
         from Backend.config import Telegram as _TG
-        return {"streams": [{"name": "🚫 Subscription Expired", "title": "Abonelik süresi doldu.", "url": _TG.SUBSCRIPTION_URL}]}
+        return {"streams": [{"name": "🚫 Abonelik süreniz doldu", "title": "Abonelik süresi doldu.", "url": _TG.SUBSCRIPTION_URL}]}
 
     if token_data.get("limit_exceeded"):
         limit_type = token_data["limit_exceeded"]
-        title = "🚫 Limit Reached – Upgrade Required"
+        title = "🚫 Kullanım limitiniz doldu – Aboneliğinizi yükseltmeniz gerekiyor."
         return {"streams": [{"name": "Limit Reached", "title": title, "url": token_data["limit_video"]}]}
 
     try:
