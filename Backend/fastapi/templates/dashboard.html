@@ -312,8 +312,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold mb-2">Manage TV Shows</h3>
-                            <p class="theme-text-secondary">Edit and organize TV series</p>
+                            <h3 class="text-xl font-semibold mb-2">Dizileri Yönetin</h3>
+                            <p class="theme-text-secondary">TV dizilerini düzenleyin ve organize edin.</p>
                             <div class="mt-2 text-primary font-semibold text-sm">{{ system_stats.tv_shows|default(0) }}
                                 shows</div>
                         </div>
@@ -334,8 +334,8 @@
                         </path>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-2">Access Management</h3>
-                <p class="theme-text-secondary">Manage API tokens for Stremio addon access</p>
+                <h3 class="text-2xl font-bold mb-2">Eklenti Yönetimi</h3>
+                <p class="theme-text-secondary">Stemio eklentisi oluşturun.</p>
             </div>
 
             <!-- Create Token Form -->
@@ -348,7 +348,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
-                        New Token
+                        Yeni eklenti
                     </button>
                 </div>
 
@@ -356,13 +356,13 @@
                     class="hidden mt-4 bg-gray-50 p-6 rounded-xl border border-gray-200 transition-all duration-300">
                     <form onsubmit="createToken(event)" class="flex flex-col md:flex-row gap-4 items-end">
                         <div class="flex-1 w-full">
-                            <label class="block text-sm font-medium theme-text-secondary mb-1">Token Name</label>
+                            <label class="block text-sm font-medium theme-text-secondary mb-1">Eklenti İsmi</label>
                             <input type="text" id="token-name" placeholder="E.g., Family iPad" required
                                 class="w-full theme-card border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary">
                         </div>
 
                         <div class="w-full md:w-32">
-                            <label class="block text-sm font-medium theme-text-secondary mb-1">Daily Limit</label>
+                            <label class="block text-sm font-medium theme-text-secondary mb-1">Günlük Limit</label>
                             <div class="relative">
                                 <input type="number" id="daily-limit" placeholder="0" step="0.1" min="0"
                                     class="w-full theme-card border border-gray-300 rounded-lg pl-4 pr-12 py-3 focus:outline-none focus:border-primary">
@@ -371,7 +371,7 @@
                         </div>
 
                         <div class="w-full md:w-32">
-                            <label class="block text-sm font-medium theme-text-secondary mb-1">Monthly Limit</label>
+                            <label class="block text-sm font-medium theme-text-secondary mb-1">Aylık Limit</label>
                             <div class="relative">
                                 <input type="number" id="monthly-limit" placeholder="0" step="0.1" min="0"
                                     class="w-full theme-card border border-gray-300 rounded-lg pl-4 pr-12 py-3 focus:outline-none focus:border-primary">
@@ -382,11 +382,11 @@
                         <div class="flex gap-2 w-full md:w-auto">
                             <button type="button" onclick="toggleCreateForm()"
                                 class="w-full md:w-auto bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200">
-                                Cancel
+                                İptal et.
                             </button>
                             <button type="submit"
                                 class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center">
-                                Create
+                                Oluştur
                             </button>
                         </div>
                     </form>
@@ -398,11 +398,11 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-gray-200">
-                            <th class="py-4 px-4 font-semibold theme-text-secondary">Name</th>
-                            <th class="py-4 px-4 font-semibold theme-text-secondary">Usage (Today / Month)</th>
-                            <th class="py-4 px-4 font-semibold theme-text-secondary">Limits (GB)</th>
-                            <th class="py-4 px-4 font-semibold theme-text-secondary">Manifest URL</th>
-                            <th class="py-4 px-4 font-semibold theme-text-secondary text-right">Actions</th>
+                            <th class="py-4 px-4 font-semibold theme-text-secondary">İsim</th>
+                            <th class="py-4 px-4 font-semibold theme-text-secondary">Kullanım (Günlük / Aylık)</th>
+                            <th class="py-4 px-4 font-semibold theme-text-secondary">Limitler (GB)</th>
+                            <th class="py-4 px-4 font-semibold theme-text-secondary">Eklenti Adresi</th>
+                            <th class="py-4 px-4 font-semibold theme-text-secondary text-right">Aksiyonlar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -414,15 +414,15 @@
                                     }}</span>
                             </td>
                             <td class="py-4 px-4 text-sm">
-                                <span class="block">Today: <span class="font-semibold text-primary"
+                                <span class="block">Bugün: <span class="font-semibold text-primary"
                                         data-bytes="{{ token.usage.daily.bytes|default(0) }}"></span></span>
-                                <span class="block text-gray-500">Month: <span
+                                <span class="block text-gray-500">Aylık: <span
                                         data-bytes="{{ token.usage.monthly.bytes|default(0) }}"></span></span>
                             </td>
                             <td class="py-4 px-4 text-sm">
                                 <div class="text-gray-600">
                                     <div class="flex items-center gap-1">
-                                        <span class="w-4 text-gray-400">D:</span>
+                                        <span class="w-4 text-gray-400">B:</span>
                                         {% if token.limits.daily_limit_gb %}
                                         <span
                                             data-bytes="{{ (token.limits.daily_limit_gb * 1024 * 1024 * 1024)|int }}"></span>
@@ -431,7 +431,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="flex items-center gap-1">
-                                        <span class="w-4 text-gray-400">M:</span>
+                                        <span class="w-4 text-gray-400">A:</span>
                                         {% if token.limits.monthly_limit_gb %}
                                         <span
                                             data-bytes="{{ (token.limits.monthly_limit_gb * 1024 * 1024 * 1024)|int }}"></span>
@@ -456,7 +456,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                                         </svg>
-                                        <span class="underline">Copy Link</span>
+                                        <span class="underline">Eklentiyi kopyala</span>
                                     </button>
                                 </div>
                             </td>
@@ -474,8 +474,7 @@
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="5" class="py-8 text-center theme-text-secondary">No tokens found. Create one to
-                                get started.</td>
+                            <td colspan="5" class="py-8 text-center theme-text-secondary">Hiç ekleneti bulunamadı. Başlamak için bir tane oluşturun.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -486,17 +485,17 @@
         <!-- Edit Limit Modal -->
         <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
             <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl transform transition-all">
-                <h3 class="text-lg font-bold mb-4 theme-text-primary">Edit Token Limits</h3>
+                <h3 class="text-lg font-bold mb-4 theme-text-primary">Eklenti limitini düzenle</h3>
                 <input type="hidden" id="edit-token-id">
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium theme-text-secondary mb-1">Daily Limit (GB)</label>
+                        <label class="block text-sm font-medium theme-text-secondary mb-1">Günlük Limit (GB)</label>
                         <input type="number" id="edit-daily" placeholder="0 for unlimited" step="0.1" min="0"
                             class="w-full theme-card border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-primary">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium theme-text-secondary mb-1">Monthly Limit (GB)</label>
+                        <label class="block text-sm font-medium theme-text-secondary mb-1">Aylık Limit (GB)</label>
                         <input type="number" id="edit-monthly" placeholder="0 for unlimited" step="0.1" min="0"
                             class="w-full theme-card border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-primary">
                     </div>
@@ -504,10 +503,9 @@
 
                 <div class="mt-6 flex justify-end space-x-3">
                     <button onclick="closeEditModal()"
-                        class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
+                        class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">İptal et</button>
                     <button onclick="saveTokenLimits()"
-                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">Save
-                        Changes</button>
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">Kaydet</button>
                 </div>
             </div>
         </div>
