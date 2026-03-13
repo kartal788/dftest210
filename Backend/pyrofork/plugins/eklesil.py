@@ -1,6 +1,7 @@
 import os
 import re
 import aiohttp
+import asyncio  # <--- BU EKSİKTİ, EKLENDİ
 from datetime import timezone, datetime
 from dateutil.parser import parse as parse_date
 
@@ -69,7 +70,6 @@ async def filesize(url):
 async def ekle(client: Client, message: Message):
     text = message.text.strip()
 
-    # Satırları ayıkla
     if "\n" in text:
         lines = text.split("\n")[1:]
     else:
@@ -99,7 +99,7 @@ async def ekle(client: Client, message: Message):
         extra_info = parts[1] if len(parts) > 1 else None
 
         try:
-            # İlerleme durumunu güncelle
+            # Durum Güncelleme
             await status.edit_text(
                 f"⏳ İşleniyor ({index}/{total_links}):\n`{link}`\n\n"
                 f"✅ Başarılı: {movie_count + series_count}\n"
@@ -122,7 +122,6 @@ async def ekle(client: Client, message: Message):
                 msg_id=message.id
             )
 
-            # Meta verisi yoksa varsayılan (fallback) değerler
             if not meta:
                 meta = {
                     "media_type": "movie", "tmdb_id": None, "imdb_id": None,
@@ -141,7 +140,6 @@ async def ekle(client: Client, message: Message):
                 "size": size
             }
 
-            # ----------------- MOVIE (Film) -----------------
             if meta["media_type"] == "movie":
                 doc = await movie_col.find_one({"tmdb_id": meta["tmdb_id"]})
                 if not doc:
@@ -162,8 +160,6 @@ async def ekle(client: Client, message: Message):
                     await movie_col.replace_one({"_id": doc["_id"]}, doc)
                 movie_count += 1
                 added_names.append(f"🎬 {meta['title']}")
-
-            # ----------------- TV (Dizi) -----------------
             else:
                 doc = await series_col.find_one({"tmdb_id": meta["tmdb_id"]})
                 episode_obj = {
@@ -207,21 +203,22 @@ async def ekle(client: Client, message: Message):
             LOGGER.exception(e)
             failed.append(line)
 
-        # Son link değilse 30 saniye bekle
+        # 30 Saniye Bekleme
         if index < total_links:
             await asyncio.sleep(30)
 
-    # ----------------- Final Mesajı -----------------
+    # Sonuç Raporu
     result_text = f"✅ **İşlem Tamamlandı**\n\n🎬 Film: {movie_count}\n📺 Dizi: {series_count}\n❌ Hatalı: {len(failed)}"
     
-    if len(added_names) <= 15:
-        detail = "\n".join(added_names)
-        result_text += f"\n\n**Eklenenler:**\n{detail}"
+    if added_names and len(added_names) <= 15:
+        result_text += "\n\n**Eklenenler:**\n" + "\n".join(added_names)
     
     if failed:
-        result_text += f"\n\n**Hatalı Linkler:**\n" + "\n".join(failed[:10])
+        result_text += "\n\n**⚠️ Hatalı Linkler:**\n" + "\n".join([f"`{f}`" for f in failed[:15]])
 
     await status.edit_text(result_text)
+
+# (Silme ve temizlik komutları aşağıda değişmeden devam ediyor...)
     
 # ----------------- /SİL -----------------
 awaiting_confirmation = {}
